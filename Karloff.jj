@@ -168,6 +168,44 @@ public class Karloff {
 			printer ((VarDecl).tokenId);
 			System.out.print(";");
 		}
+		else if (prog instanceof Atribuicao) {
+			printer ((Atribuicao).var);
+			System.out.print("=");
+			printer ((Atribuicao).exp);
+			System.out.print(";");
+		}
+		else if (prog instanceof ChamadaDeFuncao) {
+			printer ((ChamadaDeFuncao).func);
+			System.out.print("(");
+			printer ((ChamadaDeFuncao).argumentos);
+			System.out.print(")");
+			System.out.print(";");
+		}
+		else if (prog instanceof If) {
+			System.out.print("if (");
+			printer ((If).expBool);
+			System.out.print(") then ");
+			printer ((If).comandos);
+			System.out.print(";");
+		}
+		else if (prog instanceof While) {
+			System.out.print("while (");
+			printer ((While).expBool);
+			System.out.print(")");
+			printer ((While).comandos);
+			System.out.print(";");
+		}
+		else if (prog instanceof Repeat) {
+			System.out.print("repeat");
+			printer ((Repeat).comandos);
+			System.out.print("until (");
+			printer ((Repeat).expBool);
+			System.out.print(");");
+		}
+		else if (prog instanceof Return) {
+			System.out.print("return");
+			printer ((Return).exp);
+		}
 	}
 
 }
