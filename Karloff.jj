@@ -51,6 +51,38 @@ class Igual extends Exp{
 	Exp b;
 	Igual(Exp a, Exp b){this.a=a;this.b=b;}
 }
+class Tipo {}
+class Int extends Tipo {}
+class Bool extends Tipo {}
+class VarDecl {
+	String newVar;
+	Tipo tipo;
+	String tokenId;
+}
+class Comando {}
+class Atribuicao extends Comando {
+	String var;
+	Exp exp;
+}
+class ChamadaDeFuncao extends Comando {
+	String func;
+	ArrayList<Exp> argumentos;
+}
+class If extends Comando {
+	Exp expBool;
+	ArrayList<Comando> comandos;
+}
+class While extends Comando {
+	Exp expBool;
+	ArrayList<Comando> comandos;
+}
+class Repeat extends Comando {
+	ArrayList<Comando> comandos;
+	Exp expBool;
+}
+class Return extends Comando {
+	Exp exp;
+}
 
 
 public class Karloff {
@@ -250,6 +282,8 @@ Igual Igual():
 	"(" e1=E() "==" e2=E() ")"
 	{return new Igual(e1,e2);}
 }
+
+
 
 void Karloff () :
 {}
