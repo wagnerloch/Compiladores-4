@@ -256,10 +256,17 @@ TOKEN :
 Exp E () :
 {Exp e=null;Token t;}
 { 
-  ( (t=<NUM> {e= new Num(Integer.parseInt(t.image));} )| (e=Soma()))
+  ( (t=<NUM> {e= new Num(Integer.parseInt(t.image));} ) | (e=Soma()) | (e=Sub()) | (e=Mult()) | (e=Div()) | (e=And()) | (e=Or()) | (e=Menor()) | (e=Maior()) | (e=Igual()))
 
   {return e;}
 
+}
+
+Tipo Tipo():
+{Tipo t=null}
+{
+	((t=<TIPO>))
+	{return t;}
 }
 
 Soma Soma():
@@ -327,8 +334,6 @@ Igual Igual():
 	"(" e1=E() "==" e2=E() ")"
 	{return new Igual(e1,e2);}
 }
-
-
 
 void Karloff () :
 {}
