@@ -250,8 +250,7 @@ public class Karloff {
 		}
 		else if (prog instanceof VarDecl) {
 			System.out.print("newVar");
-			printer ((VarDecl).tipo);
-			printer ((VarDecl).tokenId);
+			printer ((VarDecl).decl);
 			System.out.print(";");
 		}
 		else if (prog instanceof Atribuicao) {
@@ -376,7 +375,7 @@ VarDecl VarDecl() :
 }
 
 String AuxDecl() :
-{String tipo, id; Token t}
+{String tipo, id; Token t;}
 { 
 	<NEWVAR>
 	t = <TIPO> {tipo = new String(t.image);}
@@ -386,20 +385,22 @@ String AuxDecl() :
 }
 
 SeqComandos SeqComandos() :
-{ArrayList<Comando> comandos; Token t}
+{ArrayList<Comando> comandos;}
 { 
-	(Comando())*
+	comandos.add((Comando())*);
+	return new SeqComandos(comandos);
 }
 
-void Comando() :
-{}
+String Comando() :
+{Token t; String retorno;}
 { 
-	<ID> ComandoLookahead()
+	t = <ID> ComandoLookahead()
 | 	<IF> <APARENTESES> Exp() <FPARENTESES> <THEN> <ACHAVES> SeqComandos() <FCHAVES>  <PONTO_VIRGULA>
 | 	<WHILE> <APARENTESES> Exp() <FPARENTESES> <ACHAVES> SeqComandos() <FCHAVES> <PONTO_VIRGULA>
 | 	<REPEAT> <ACHAVES> SeqComandos() <FCHAVES> <UNTIL> <APARENTESES> Exp() <FPARENTESES> <PONTO_VIRGULA>
 | 	<RETURN> Exp() <PONTO_VIRGULA>
-| 	<OUTPUT> <APARENTESES> Exp() <FPARENTESES> <PONTO_VIRGULA>
+| 	<OUTPUT> <APARENTESES> Exp() <FPARENTESES> <PONTO_VIRGULA> {retorno = new String(t.image);}
+	return retorno;
 }
 
 void ComandoLookahead() :
