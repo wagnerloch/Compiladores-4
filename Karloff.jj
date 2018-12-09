@@ -107,59 +107,66 @@ public class Karloff {
 		}
 		else if (prog instanceof Sub) {
 			System.out.print("(");
-			printer (((Soma) e).a);
+			printer (((Sub) e).a);
 			System.out.print("-");
-			printer (((Soma) e).b);
+			printer (((Sub) e).b);
 			System.out.print(")");
 		}
 		else if (prog instanceof Mult) {
 			System.out.print("(");
-			printer (((Soma) e).a);
+			printer (((Mult) e).a);
 			System.out.print("*");
-			printer (((Soma) e).b);
+			printer (((Mult) e).b);
 			System.out.print(")");
 		}
 		else if (prog instanceof Div) {
 			System.out.print("(");
-			printer (((Soma) e).a);
+			printer (((Div) e).a);
 			System.out.print("/");
-			printer (((Soma) e).b);
+			printer (((Div) e).b);
 			System.out.print(")");
 		}
 		else if (prog instaceof And) {
 			System.out.print("(");
-			printer (((Soma) e).a);
+			printer (((And) e).a);
 			System.out.print("&");
-			printer (((Soma) e).b);
+			printer (((And) e).b);
 			System.out.print(")");
 		}
 		else if (prog instance Or) {
 			System.out.print("(");
-			printer (((Soma) e).a);
+			printer (((Or) e).a);
 			System.out.print("|");
-			printer (((Soma) e).b);
+			printer (((Or) e).b);
 			System.out.print(")");
 		}
 		else if (prog instanceof Menor) {
 			System.out.print("(");
-			printer (((Soma) e).a);
+			printer (((Menor) e).a);
 			System.out.print("<");
-			printer (((Soma) e).b);
+			printer (((Menor) e).b);
 			System.out.print(")");
 		}
 		else if (prog instaceof Maior) {
 			System.out.print("(");
-			printer (((Soma) e).a);
+			printer (((Maior) e).a);
 			System.out.print(">");
-			printer (((Soma) e).b);
+			printer (((Maior) e).b);
 			System.out.print(")");
 		}
 		else if (prog instanceof Igual) {
 			System.out.print("(");
-			printer (((Soma) e).a);
+			printer (((Igual) e).a);
 			System.out.print("==");
-			printer (((Soma) e).b);
+			printer (((Igual) e).b);
 			System.out.print(")");
+		}
+		else if (prog instanceof VarDecl) {
+			System.out.print("VARDECL");
+			printer ((VarDecl).newVar);
+			printer ((VarDecl).tipo);
+			printer ((VarDecl).tokenId);
+			System.out.print(";");
 		}
 	}
 
