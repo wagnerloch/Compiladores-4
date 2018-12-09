@@ -107,12 +107,6 @@ class VarDecl {
 	}
 }
 
-class Tipo {
-	Tipo () {
-
-	}
-}
-
 class SeqComandos {
 	ArrayList<Comando> comandos;
 	SeqComandos (ArrayList<Comando> comandos) {
@@ -130,8 +124,11 @@ class Comando {
 }
 
 class Exp {
-	Exp () {
-
+	ArrayList<Fator> fator;
+	ArrayList<Exp> expressoes;
+	Exp (ArrayList<Fator> fator, ArrayList<Exp> expressoes) {
+		this.fator = fator;
+		this.expressoes = expressoes;
 	}
 }
 
@@ -139,13 +136,6 @@ class Fator {
 	ArrayList<ListaExp> listaExpressoes;
 	Fator (ArrayList<ListaExp> listaExpressoes) {
 		this.listaExpressoes = listaExpressoes;
-	}
-}
-
-class Op {
- //operacoes
-	Op () {
-
 	}
 }
 
@@ -356,79 +346,6 @@ Exp E () :
 
   {return e;}
 
-}
-
-Tipo Tipo():
-{Tipo t=null}
-{
-	((t=<TIPO>))
-	{return t;}
-}
-
-Soma Soma():
-{ Exp e1, e2;}
-{ 
- 
- "(" e1=E() "+" e2=E() ")"
-
-  {return new Soma(e1,e2);}
-
-}
-
-Sub Sub():
-{Exp e1, e2;}
-{
-	"(" e1=E() "-" e2=E() ")"
-	{return new Sub(e1,e2);}
-}
-
-Mult Mult():
-{Exp e1, e2;}
-{
-	"(" e1=E() "*" e2=E() ")"
-	{return new Mult(e1,e2);}
-}
-
-Div Div():
-{Exp e1, e2;}
-{
-	"(" e1=E() "/" e2=E() ")"
-	{return new Div(e1,e2);}
-}
-
-And And():
-{Exp e1, e2;}
-{
-	"(" e1=E() "&" e2=E() ")"
-	{return new And(e1,e2);}
-}
-
-Or Or():
-{Exp e1, e2;}
-{
-	"(" e1=E() "|" e2=E() ")"
-	{return new Or(e1,e2);}
-}
-
-Menor Menor():
-{Exp e1, e2;}
-{
-	"(" e1=E() "<" e2=E() ")"
-	{return new Menor(e1,e2);}
-}
-
-Maior Maior():
-{Exp e1, e2;}
-{
-	"(" e1=E() ">" e2=E() ")"
-	{return new Maior(e1,e2);}
-}
-
-Igual Igual():
-{Exp e1, e2;}
-{
-	"(" e1=E() "==" e2=E() ")"
-	{return new Igual(e1,e2);}
 }
 
 void Karloff () :
