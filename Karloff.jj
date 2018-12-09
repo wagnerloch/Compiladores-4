@@ -1,111 +1,45 @@
-PARSER_BEGIN(Karloff)
+﻿PARSER_BEGIN(Karloff)
 import java.io.*;
+import java.util.ArrayList;
 
-/*class Exp {}
-class Num extends Exp{
-  int x;
-  Num(int x){this.x=x;}
+class Karloff{
+    Main main;
+    Func func;
+    Karloff(Main main, Func func){
+        this.main = main;
+        this.func = func;
+    }
 }
-
-class Main
-
-class Soma extends Exp{
-	Exp a;
-	Exp b;
-  	Soma(Exp a, Exp b){this.a=a;this.b=b;}
-}
-class Sub extends Exp{
-	Exp a;
-	Exp b;
-	Sub(Exp a, Exp b){this.a=a;this.b=b;}
-}
-class Mult extends Exp{
-	Exp a;
-	Exp b;
-	Mult(Exp a, Exp b){this.a=a;this.b=b;}
-}
-class Div extends Exp{
-	Exp a;
-	Exp b;
-	Div(Exp a, Exp b){this.a=a;this.b=b;}
-}
-class And extends Exp{
-	Exp a;
-	Exp b;
-	And(Exp a, Exp b){this.a=a;this.b=b;}
-}
-class Or extends Exp{
-	Exp a;
-	Exp b;
-	Or(Exp a, Exp b){this.a=a;this.b=b;}
-}
-class Menor extends Exp{
-	Exp a;
-	Exp b;
-	Menor(Exp a, Exp b){this.a=a;this.b=b;}
-}
-class Maior extends Exp{
-	Exp a;
-	Exp b;
-	Maior(Exp a, Exp b){this.a=a;this.b=b;}
-}
-class Igual extends Exp{
-	Exp a;
-	Exp b;
-	Igual(Exp a, Exp b){this.a=a;this.b=b;}
-}
-class Tipo {}
-class Int extends Tipo {}
-class Bool extends Tipo {}
-class VarDecl {
-	String newVar;
-	Tipo tipo;
-	String tokenId;
-}
-class Comando {}
-class Atribuicao extends Comando {
-	String var;
-	Exp exp;
-}
-class ChamadaDeFuncao extends Comando {
-	String func;
-	ArrayList<Exp> argumentos;
-}
-class If extends Comando {
-	Exp expBool;
-	ArrayList<Comando> comandos;
-}
-class While extends Comando {
-	Exp expBool;
-	ArrayList<Comando> comandos;
-}
-class Repeat extends Comando {
-	ArrayList<Comando> comandos;
-	Exp expBool;
-}
-class Return extends Comando {
-	Exp exp;
-}*/
-
-/**
-Essencialmente tem que criar uma classe pra cada não terminal, instâncias elas e depois criar a função que printa
-**/
 
 class Main {
-	ArrayList<VarDecl> varDecl;
-	ArrayList<SeqComandos> seqComandos;
-	Main (ArrayList<VarDecl> varDecl, ArrayList<SeqComandos> seqComandos) {
+	VarDecl varDecl;
+	SeqComandos seqComandos;
+	Main (VarDecl varDecl, SeqComandos seqComandos) {
 		this.varDecl = varDecl;
 		this.seqComandos = seqComandos;
 	}
 }
 
 class VarDecl {
-	String decl;
-	VarDecl (String decl) {
-		this.decl = decl;
+	ArrayList<Variable> variables;
+	VarDecl(ArrayList<Variable> variables){
+	    this.variables = variables
 	}
 }
+
+class Variable{
+    String tipo;
+    String id;
+    Variable(String tipo, String id){
+        this.tipo = tipo;
+        this.id = id;
+    }
+}
+
+
+/**
+Essencialmente tem que criar uma classe pra cada não terminal, instâncias elas e depois criar a função que printa
+**/
 
 class SeqComandos {
 	ArrayList<Comando> comandos;
@@ -347,41 +281,42 @@ Exp E () :
 
 }
 
-void Karloff () :
-{}
-{ 
-
-  Main() 
-  (Func())?
-  <EOF> 
+Karloff Karloff_Func () :
+{Main mainLocal = null; Func funcLocal = null}
+{
+  mainLocal = Main_Func()
+  (funcLocal = Func_Func())?
+  <EOF>
+  { return new Karloff(mainLocal, funcLocal);}
 }
 	
 
-Main Main ():
-{ArrayList<VarDecl> varDecl; ArrayList<SeqComandos> seqComandos;}
+Main Main_Func ():
+{VarDecl varDeclLocal = null; SeqComandos seqComandosLocal = null}
 {
 	<VOID><MAIN> <ACHAVES> 
 
-	this.varDecl = VarDecl()
-	this.seqComandos = SeqComandos()
+	varDeclLocal = VarDecl()
+	seqComandosLocal = SeqComandos()
 
 	<FCHAVES>
-	return new Main (this.varDecl, this.seqComandos);
+	{return new Main (varDeclLocal, seqComandosLocal);}
 }
-VarDecl VarDecl() :
-{}
+VarDecl VarDecl_Func() :
+{VarDeclLocal = new ArrayList<Variable>(), Variable v}
 { 
-	return new VarDecl((AuxDecl())*);
+	(v = AuxDecl(){VarDeclLocal.add(v);})*
+	{return new VarDecl(VarDeclLocal);}
 }
 
-String AuxDecl() :
-{String tipo, id; Token t;}
+Variable AuxDecl_Func() :
+{String tipoLocal, String idLocal, id; Token t;}
 { 
 	<NEWVAR>
-	t = <TIPO> {tipo = new String(t.image);}
-	t = <ID> {id = new String(t.image);}
+	t = <TIPO> {tipoLocal = new String(t.image);}
+	t = <ID> {idLocal = new String(t.image);}
 	<PONTO_VIRGULA>
-	return tipo+id;
+	{return new Variable(tipoLocal, idLocal);}
 }
 
 SeqComandos SeqComandos() :
