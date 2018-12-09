@@ -1,0 +1,370 @@
+PARSER_BEGIN(Karloff)
+import java.io.*;
+
+class Exp {}
+class Num extends Exp{
+  int x;
+  Num(int x){this.x=x;}
+}
+class Soma extends Exp{
+	Exp a;
+	Exp b;
+  	Soma(Exp a, Exp b){this.a=a;this.b=b;}
+}
+class Sub extends Exp{
+	Exp a;
+	Exp b;
+	Sub(Exp a, Exp b){this.a=a;this.b=b;}
+}
+class Mult extends Exp{
+	Exp a;
+	Exp b;
+	Mult(Exp a, Exp b){this.a=a;this.b=b;}
+}
+class Div extends Exp{
+	Exp a;
+	Exp b;
+	Div(Exp a, Exp b){this.a=a;this.b=b;}
+}
+class And extends Exp{
+	Exp a;
+	Exp b;
+	And(Exp a, Exp b){this.a=a;this.b=b;}
+}
+class Or extends Exp{
+	Exp a;
+	Exp b;
+	Or(Exp a, Exp b){this.a=a;this.b=b;}
+}
+class Menor extends Exp{
+	Exp a;
+	Exp b;
+	Menor(Exp a, Exp b){this.a=a;this.b=b;}
+}
+class Maior extends Exp{
+	Exp a;
+	Exp b;
+	Maior(Exp a, Exp b){this.a=a;this.b=b;}
+}
+class Igual extends Exp{
+	Exp a;
+	Exp b;
+	Igual(Exp a, Exp b){this.a=a;this.b=b;}
+}
+
+
+public class Karloff {
+
+	public static void main(String args[]) throws ParseException,IOException {
+    
+    Karloff parser = new Karloff(new FileInputStream(args[0]));
+    ArvoreKarloff arvore = parser.Karloff();
+    pprint(arvore);
+  }
+
+  	public static void pprint (ArvoreKarloff prog) {
+		if (prog instanceof Num) { 
+			System.out.print( ((Num) e).x);
+		}
+		else if (prog instanceof Soma) {
+			System.out.print("(");
+			printer (((Soma) e).a);
+			System.out.print("+");
+			printer (((Soma) e).b);
+			System.out.print(")");
+		}
+		else if (prog instanceof Sub) {
+			System.out.print("(");
+			printer (((Soma) e).a);
+			System.out.print("-");
+			printer (((Soma) e).b);
+			System.out.print(")");
+		}
+		else if (prog instanceof Mult) {
+			System.out.print("(");
+			printer (((Soma) e).a);
+			System.out.print("*");
+			printer (((Soma) e).b);
+			System.out.print(")");
+		}
+		else if (prog instanceof Div) {
+			System.out.print("(");
+			printer (((Soma) e).a);
+			System.out.print("/");
+			printer (((Soma) e).b);
+			System.out.print(")");
+		}
+		else if (prog instaceof And) {
+			System.out.print("(");
+			printer (((Soma) e).a);
+			System.out.print("&");
+			printer (((Soma) e).b);
+			System.out.print(")");
+		}
+		else if (prog instance Or) {
+			System.out.print("(");
+			printer (((Soma) e).a);
+			System.out.print("|");
+			printer (((Soma) e).b);
+			System.out.print(")");
+		}
+		else if (prog instanceof Menor) {
+			System.out.print("(");
+			printer (((Soma) e).a);
+			System.out.print("<");
+			printer (((Soma) e).b);
+			System.out.print(")");
+		}
+		else if (prog instaceof Maior) {
+			System.out.print("(");
+			printer (((Soma) e).a);
+			System.out.print(">");
+			printer (((Soma) e).b);
+			System.out.print(")");
+		}
+		else if (prog instanceof Igual) {
+			System.out.print("(");
+			printer (((Soma) e).a);
+			System.out.print("==");
+			printer (((Soma) e).b);
+			System.out.print(")");
+		}
+	}
+
+}
+
+PARSER_END(Karloff)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+  <MAIN: "main">
+| <FUNC: "func">
+| <ACHAVES: "{">
+| <FCHAVES: "}">
+| <APARENTESES: "(">
+| <FPARENTESES: ")">
+| <VOID: "void">
+| <IF: "if">
+| <THEN: "then">
+| <WHILE: "while">
+| <REPEAT: "repeat">
+| <RETURN: "return">
+| <UNTIL: "until">
+| <OUTPUT: "System.output">
+| <NEWVAR: "newVar">
+}
+
+TOKEN :
+{
+ <OP: ("+" | "-" | "*" | "/" | "&" | "|" | "<" | ">" | "==")>
+|< TIPO: ("int" | "bool")>
+|< TRUE: ("true")>
+|< FALSE: ("false")>
+|< PONTO_VIRGULA: (";")>
+|< VIRGULA: (",")>
+|< IGUAL: ("=")>
+|< NUMLIT: ["0"-"9"] ( ["0"-"9"])* ("."(["0"-"9"])+)? ("e"(["0"-"9"])+)?>
+|< ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"])* ("_")*>
+
+}
+
+Exp E () :
+{Exp e=null;Token t;}
+{ 
+  ( (t=<NUM> {e= new Num(Integer.parseInt(t.image));} )| (e=Soma()))
+
+  {return e;}
+
+}
+
+Soma Soma():
+{ Exp e1, e2;}
+{ 
+ 
+ "(" e1=E() "+" e2=E() ")"
+
+  {return new Soma(e1,e2);}
+
+}
+
+Sub Sub():
+{Exp e1, e2;}
+{
+	"(" e1=E() "-" e2=E() ")"
+	{return new Sub(e1,e2);}
+}
+
+Mult Mult():
+{Exp e1, e2;}
+{
+	"(" e1=E() "*" e2=E() ")"
+	{return new Mult(e1,e2);}
+}
+
+Div Div():
+{Exp e1, e2;}
+{
+	"(" e1=E() "/" e2=E() ")"
+	{return new Div(e1,e2);}
+}
+
+And And():
+{Exp e1, e2;}
+{
+	"(" e1=E() "&" e2=E() ")"
+	{return new And(e1,e2);}
+}
+
+Or Or():
+{Exp e1, e2;}
+{
+	"(" e1=E() "|" e2=E() ")"
+	{return new Or(e1,e2);}
+}
+
+Menor Menor():
+{Exp e1, e2;}
+{
+	"(" e1=E() "<" e2=E() ")"
+	{return new Menor(e1,e2);}
+}
+
+Maior Maior():
+{Exp e1, e2;}
+{
+	"(" e1=E() ">" e2=E() ")"
+	{return new Maior(e1,e2);}
+}
+
+Igual Igual():
+{Exp e1, e2;}
+{
+	"(" e1=E() "==" e2=E() ")"
+	{return new Igual(e1,e2);}
+}
+
+void Karloff () :
+{}
+{ 
+
+  Main() 
+  (Func())?
+  <EOF> 
+}
+	
+
+void Main ():
+{}
+{
+ <VOID><MAIN> <ACHAVES> 
+ 
+ 	VarDecl()
+	SeqComandos()
+
+ <FCHAVES>
+
+}
+void VarDecl() :
+{}
+{ 
+	(AuxDecl())*
+}
+
+void AuxDecl() :
+{}
+{ 
+	<NEWVAR>
+	<TIPO>
+	<ID>
+	<PONTO_VIRGULA>
+}
+
+void SeqComandos() :
+{}
+{ 
+	(Comando())*
+}
+
+void Comando() :
+{}
+{ 
+	<ID> ComandoLookahead()
+| 	<IF> <APARENTESES> Exp() <FPARENTESES> <THEN> <ACHAVES> SeqComandos() <FCHAVES>  <PONTO_VIRGULA>
+| 	<WHILE> <APARENTESES> Exp() <FPARENTESES> <ACHAVES> SeqComandos() <FCHAVES> <PONTO_VIRGULA>
+| 	<REPEAT> <ACHAVES> SeqComandos() <FCHAVES> <UNTIL> <APARENTESES> Exp() <FPARENTESES> <PONTO_VIRGULA>
+| 	<RETURN> Exp() <PONTO_VIRGULA>
+| 	<OUTPUT> <APARENTESES> Exp() <FPARENTESES> <PONTO_VIRGULA>
+}
+
+void ComandoLookahead() :
+{}
+{
+	<IGUAL> Exp() <PONTO_VIRGULA>
+|	<APARENTESES> (ListaExp())? <FPARENTESES> <PONTO_VIRGULA>
+}
+
+void Exp() :
+{}
+{ 
+	<APARENTESES> Exp() <OP> Exp() <FPARENTESES>
+| 	Fator()
+}
+
+void Fator() :
+{}
+{ 
+	<ID> FatorLookahead()
+|	<NUMLIT>
+|	<TRUE>
+|	<FALSE>
+}
+
+void FatorLookahead() :
+{}
+{
+	(<APARENTESES> (ListaExp())? <FPARENTESES>)?
+}
+
+void ListaExp() :
+{}
+{ 
+	Exp() AuxListaExp()
+}
+
+void AuxListaExp() :
+{}
+{
+	(<VIRGULA> Exp())*
+}
+
+void Func() :
+{}
+{ 
+	<FUNC> <TIPO> <ID> <APARENTESES> (ListaArg())? <FPARENTESES> <ACHAVES> VarDecl() SeqComandos() <FCHAVES> AuxFunc()
+}
+
+void AuxFunc() :
+{}
+{
+	(<FUNC> <TIPO> <ID> <APARENTESES> (ListaArg())? <FPARENTESES> <ACHAVES> VarDecl() <FCHAVES>)*
+}
+
+void ListaArg() :
+{}
+{ 
+	<TIPO> <ID> AuxListaArg()
+}
+
+void AuxListaArg() :
+{}
+{
+	(<VIRGULA> <TIPO> <ID>)*
+}
