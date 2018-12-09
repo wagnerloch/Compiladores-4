@@ -92,24 +92,27 @@ Essencialmente tem que criar uma classe pra cada não terminal, instâncias elas
 **/
 
 class Main {
-	String texto;
-	ArrayList<VarDecl> varDecls;
+	ArrayList<VarDecl> varDecl;
 	ArrayList<SeqComandos> seqComandos;
+	Main (ArrayList<VarDecl> varDecl, ArrayList<SeqComandos> seqComandos) {
+		this.varDecl = varDecl;
+		this.seqComandos = seqComandos;
+	}
 }
 
 class VarDecl {
 	Tipo tipo;
-	String tokenId;
 }
 
 class Tipo {}
 
 class SeqComandos {
-
+	ArrayList<Comando> comandos;
 }
 
 class Comando {
-
+	ArrayList<Exp> expressoes;
+	ArrayList<ListaExp> listaExpressoes;
 }
 
 class Exp {
@@ -117,23 +120,29 @@ class Exp {
 }
 
 class Fator {
-
+	ArrayList<ListaExp> listaExpressoes;
 }
 
 class Op {
-
+ //operacoes
 }
 
 class ListaExp {
-
+	ArrayList<Exp> expressoes;
+	ArrayList<ListaExp> listaExpressoes;
 }
 
 class Func {
-
+	ArrayList<Func> funcoes;
+	ArrayList<Tipo> tipos;
+	ArrayList<VarDecl> varDecls;
+	ArrayList<SeqComandos> seqComandos;
+	ArrayList<ListaArg> listaArgumentos;
 }
 
 class ListaArg {
-
+	ArrayList<Tipo> tipos;
+	ArrayList<ListaArg> listaArgumentos;
 }
 
 
@@ -397,18 +406,18 @@ void Karloff () :
 	
 
 Main Main ():
-{}
+{ArrayList<VarDecl> varDecl; ArrayList<SeqComandos> seqComandos;}
 {
- <VOID><MAIN> <ACHAVES> 
- 
- 	VarDecl()
-	SeqComandos()
+	<VOID><MAIN> <ACHAVES> 
 
- <FCHAVES>
+	this.varDecl = VarDecl()
+	this.seqComandos = SeqComandos()
 
+	<FCHAVES>
+	return new Main (this.varDecl, this.seqComandos);
 }
 VarDecl VarDecl() :
-{}
+{Tipo tipo}
 { 
 	(AuxDecl())*
 }
