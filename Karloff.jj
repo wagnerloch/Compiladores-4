@@ -1,11 +1,14 @@
 PARSER_BEGIN(Karloff)
 import java.io.*;
 
-class Exp {}
+/*class Exp {}
 class Num extends Exp{
   int x;
   Num(int x){this.x=x;}
 }
+
+class Main
+
 class Soma extends Exp{
 	Exp a;
 	Exp b;
@@ -82,6 +85,55 @@ class Repeat extends Comando {
 }
 class Return extends Comando {
 	Exp exp;
+}*/
+
+/**
+Essencialmente tem que criar uma classe pra cada não terminal, instâncias elas e depois criar a função que printa
+**/
+
+class Main {
+	String texto;
+	ArrayList<VarDecl> varDecls;
+	ArrayList<SeqComandos> seqComandos;
+}
+
+class VarDecl {
+	Tipo tipo;
+	String tokenId;
+}
+
+class Tipo {}
+
+class SeqComandos {
+
+}
+
+class Comando {
+
+}
+
+class Exp {
+
+}
+
+class Fator {
+
+}
+
+class Op {
+
+}
+
+class ListaExp {
+
+}
+
+class Func {
+
+}
+
+class ListaArg {
+
 }
 
 
@@ -162,8 +214,7 @@ public class Karloff {
 			System.out.print(")");
 		}
 		else if (prog instanceof VarDecl) {
-			System.out.print("VARDECL");
-			printer ((VarDecl).newVar);
+			System.out.print("newVar");
 			printer ((VarDecl).tipo);
 			printer ((VarDecl).tokenId);
 			System.out.print(";");
@@ -345,7 +396,7 @@ void Karloff () :
 }
 	
 
-void Main ():
+Main Main ():
 {}
 {
  <VOID><MAIN> <ACHAVES> 
@@ -356,7 +407,7 @@ void Main ():
  <FCHAVES>
 
 }
-void VarDecl() :
+VarDecl VarDecl() :
 {}
 { 
 	(AuxDecl())*
@@ -371,7 +422,7 @@ void AuxDecl() :
 	<PONTO_VIRGULA>
 }
 
-void SeqComandos() :
+SeqComandos SeqComandos() :
 {}
 { 
 	(Comando())*
@@ -395,14 +446,14 @@ void ComandoLookahead() :
 |	<APARENTESES> (ListaExp())? <FPARENTESES> <PONTO_VIRGULA>
 }
 
-void Exp() :
+Exp Exp() :
 {}
 { 
 	<APARENTESES> Exp() <OP> Exp() <FPARENTESES>
 | 	Fator()
 }
 
-void Fator() :
+Fator Fator() :
 {}
 { 
 	<ID> FatorLookahead()
@@ -417,7 +468,7 @@ void FatorLookahead() :
 	(<APARENTESES> (ListaExp())? <FPARENTESES>)?
 }
 
-void ListaExp() :
+ListaExp ListaExp() :
 {}
 { 
 	Exp() AuxListaExp()
@@ -429,7 +480,7 @@ void AuxListaExp() :
 	(<VIRGULA> Exp())*
 }
 
-void Func() :
+Func Func() :
 {}
 { 
 	<FUNC> <TIPO> <ID> <APARENTESES> (ListaArg())? <FPARENTESES> <ACHAVES> VarDecl() SeqComandos() <FCHAVES> AuxFunc()
@@ -441,7 +492,7 @@ void AuxFunc() :
 	(<FUNC> <TIPO> <ID> <APARENTESES> (ListaArg())? <FPARENTESES> <ACHAVES> VarDecl() <FCHAVES>)*
 }
 
-void ListaArg() :
+ListaArg ListaArg() :
 {}
 { 
 	<TIPO> <ID> AuxListaArg()
