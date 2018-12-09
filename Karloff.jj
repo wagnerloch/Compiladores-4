@@ -101,35 +101,61 @@ class Main {
 }
 
 class VarDecl {
-	Tipo tipo;
+	String decl;
+	VarDecl (String decl) {
+		this.decl = decl;
+	}
 }
 
-class Tipo {}
+class Tipo {
+	Tipo () {
+
+	}
+}
 
 class SeqComandos {
 	ArrayList<Comando> comandos;
+	SeqComandos (ArrayList<Comando> comandos) {
+		this.comandos = comandos;
+	}
 }
 
 class Comando {
 	ArrayList<Exp> expressoes;
 	ArrayList<ListaExp> listaExpressoes;
+	Comando (ArrayList<Exp> expressoes,	ArrayList<ListaExp> listaExpressoes) {
+		this.expressoes = expressoes;
+		this.listaExpressoes = listaExpressoes;
+	}
 }
 
 class Exp {
+	Exp () {
 
+	}
 }
 
 class Fator {
 	ArrayList<ListaExp> listaExpressoes;
+	Fator (ArrayList<ListaExp> listaExpressoes) {
+		this.listaExpressoes = listaExpressoes;
+	}
 }
 
 class Op {
  //operacoes
+	Op () {
+
+	}
 }
 
 class ListaExp {
 	ArrayList<Exp> expressoes;
 	ArrayList<ListaExp> listaExpressoes;
+	ListaExp (ArrayList<Exp> expressoes, ArrayList<ListaExp> listaExpressoes) {
+		this.expressoes = expressoes;
+		this.listaExpressoes = listaExpressoes;
+	}
 }
 
 class Func {
@@ -138,11 +164,21 @@ class Func {
 	ArrayList<VarDecl> varDecls;
 	ArrayList<SeqComandos> seqComandos;
 	ArrayList<ListaArg> listaArgumentos;
+	Func (ArrayList<Func> funcoes, ArrayList<Tipo> tipos, ArrayList<VarDecl> varDecls, ArrayList<SeqComandos> seqComandos,ArrayList<ListaArg> listaArgumentos) {
+		this.funcoes = funcoes;
+		this.tipos = tipos;
+		this.varDecls = varDecls;
+		this.seqComandos = seqComandos;
+		this.listaArgumentos = listaArgumentos;
+	}
 }
 
 class ListaArg {
 	ArrayList<Tipo> tipos;
 	ArrayList<ListaArg> listaArgumentos;
+	ListaArg (ArrayList<Tipo> tipos, ArrayList<ListaArg> listaArgumentos) {
+		this.tipos = tipos;
+	}
 }
 
 
@@ -417,22 +453,23 @@ Main Main ():
 	return new Main (this.varDecl, this.seqComandos);
 }
 VarDecl VarDecl() :
-{Tipo tipo}
-{ 
-	(AuxDecl())*
-}
-
-void AuxDecl() :
 {}
 { 
+	return new VarDecl((AuxDecl())*);
+}
+
+String AuxDecl() :
+{String tipo, id; Token t}
+{ 
 	<NEWVAR>
-	<TIPO>
-	<ID>
+	t = <TIPO> {tipo = new String(t.image);}
+	t = <ID> {id = new String(t.image);}
 	<PONTO_VIRGULA>
+	return tipo+id;
 }
 
 SeqComandos SeqComandos() :
-{}
+{ArrayList<Comando> comandos; Token t}
 { 
 	(Comando())*
 }
@@ -463,12 +500,13 @@ Exp Exp() :
 }
 
 Fator Fator() :
-{}
+{ArrayList<ListaExp> listaExpressoes;}
 { 
 	<ID> FatorLookahead()
 |	<NUMLIT>
 |	<TRUE>
 |	<FALSE>
+	return new Fator();
 }
 
 void FatorLookahead() :
