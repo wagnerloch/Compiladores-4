@@ -20,6 +20,24 @@ class Main {
 	}
 }
 
+class SeqComandos {
+	ArrayList<Comando> comandos;
+	SeqComandos (ArrayList<Comando> comandos) {
+		this.comandos = comandos;
+	}
+}
+
+class Comando {
+	Variable var;
+	ArrayList<String> expressoes;
+	ArrayList<SeqComandos> seqComandos;
+	Comando (Variable var, ArrayList<String> expressoes,ArrayList<SeqComandos> seqComandos) {
+		this.var = var;
+		this.expressoes = expressoes;
+		this.seqComandos = seqComandos;
+	}
+}
+
 class VarDecl {
 	ArrayList<Variable> variables;
 	VarDecl(ArrayList<Variable> variables){
@@ -36,26 +54,28 @@ class Variable{
     }
 }
 
+class ListaArg {
+	ArrayList<Variable> var;
+	ListaArg (ArrayList<Variable> var) {
+		this.var = var;
+	}
+}
+
+class Func {
+	ArrayList<Variable> var;
+	ArrayList<ListaArg> listaArg;
+	Func (ArrayList<Variable> var, ArrayList<ListaArg> listaArg) {
+		this.var = var;
+		this.listaArg = listaArg;
+	}
+
+}
+
 
 /**
 Essencialmente tem que criar uma classe pra cada não terminal, instâncias elas e depois criar a função que printa
 **/
 
-class SeqComandos {
-	ArrayList<Comando> comandos;
-	SeqComandos (ArrayList<Comando> comandos) {
-		this.comandos = comandos;
-	}
-}
-
-class Comando {
-	ArrayList<Exp> expressoes;
-	ArrayList<ListaExp> listaExpressoes;
-	Comando (ArrayList<Exp> expressoes,	ArrayList<ListaExp> listaExpressoes) {
-		this.expressoes = expressoes;
-		this.listaExpressoes = listaExpressoes;
-	}
-}
 
 class Exp {
 	ArrayList<Fator> fator;
@@ -81,30 +101,6 @@ class ListaExp {
 		this.listaExpressoes = listaExpressoes;
 	}
 }
-
-class Func {
-	ArrayList<Func> funcoes;
-	ArrayList<Tipo> tipos;
-	ArrayList<VarDecl> varDecls;
-	ArrayList<SeqComandos> seqComandos;
-	ArrayList<ListaArg> listaArgumentos;
-	Func (ArrayList<Func> funcoes, ArrayList<Tipo> tipos, ArrayList<VarDecl> varDecls, ArrayList<SeqComandos> seqComandos,ArrayList<ListaArg> listaArgumentos) {
-		this.funcoes = funcoes;
-		this.tipos = tipos;
-		this.varDecls = varDecls;
-		this.seqComandos = seqComandos;
-		this.listaArgumentos = listaArgumentos;
-	}
-}
-
-class ListaArg {
-	ArrayList<Tipo> tipos;
-	ArrayList<ListaArg> listaArgumentos;
-	ListaArg (ArrayList<Tipo> tipos, ArrayList<ListaArg> listaArgumentos) {
-		this.tipos = tipos;
-	}
-}
-
 
 public class Karloff {
 
